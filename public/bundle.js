@@ -773,11 +773,6 @@ var middleware = (0, _redux.applyMiddleware)(_reduxLogger.logger);
 
 var store = (0, _redux.createStore)(_index2.default, middleware);
 
-store.subscribe(function () {
-    console.log('current state is : ', store.getState());
-    //console.log('current state is : ', store.getState()[1].price);
-});
-
 (0, _reactDom.render)(_react2.default.createElement(
     _reactRedux.Provider,
     { store: store },
@@ -785,42 +780,35 @@ store.subscribe(function () {
 ), document.getElementById('app'));
 
 //step 2 create and dispatch actions
-store.dispatch((0, _booksActions.postBook)([{
-    id: 1,
-    title: 'This is book title',
-    description: 'Book description',
-    price: '1 dollar'
-}, {
-    id: 2,
-    title: 'This is second book title',
-    description: 'Second Book description',
-    price: '2 dollar'
-}]));
 
-//DISPATCH a second action
-store.dispatch((0, _booksActions.postBook)([{
-    id: 3,
-    title: 'This is third book title',
-    description: 'third Book description',
-    price: '3 dollar'
-}]));
+// //DISPATCH a second action
+// store.dispatch(postBook(
+//     [{
+//         id: 3,
+//         title: 'This is third book title',
+//         description: 'third Book description',
+//         price: '3 dollar'
+//     }]
+// ));
 
-// Delete  a book
-store.dispatch((0, _booksActions.deleteBook)({
-    id: 1
-}));
+// // Delete  a book
+// store.dispatch(deleteBook(
+//     {
+//         id: 1
+//     }
+// ));
 
-//update a book
-store.dispatch((0, _booksActions.updateBook)({
-    id: 2,
-    title: 'updated title',
-    description: 'updated description',
-    price: 'updated price 4 dollar'
-}));
+// //update a book
+// store.dispatch(updateBook({
+//     id: 2,
+//     title: 'updated title',
+//     description: 'updated description',
+//     price: 'updated price 4 dollar'
+// }))
 
-//--------Cart action---------------
-//ADD to cart
-store.dispatch((0, _cartActions.addToCart)([{ id: 2 }]));
+// //--------Cart action---------------
+// //ADD to cart
+// store.dispatch(addToCart([{ id: 2 }]));
 
 /***/ }),
 /* 9 */
@@ -1447,10 +1435,25 @@ exports.booksReducers = booksReducers;
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function booksReducers() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { books: [] };
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
+        books: [{
+            id: 1,
+            title: 'Title: Harry 1',
+            description: 'Book description',
+            price: '1 dollar'
+        }, {
+            id: 2,
+            title: 'Title: Harry 2',
+            description: 'Second Book description',
+            price: '2 dollar'
+        }]
+    };
     var action = arguments[1];
 
     switch (action.type) {
+        case "GET_BOOKS":
+            return _extends({}, state, { books: [].concat(_toConsumableArray(state.books))
+            });
         case "POST_BOOK":
             // let books = state.books.concat(action.payload);
             // return {books};
@@ -1535,15 +1538,22 @@ function addToCart(book) {
 
 "use strict";
 
-
-//POST a book
+//GET books
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.getBooks = getBooks;
 exports.postBook = postBook;
 exports.deleteBook = deleteBook;
 exports.updateBook = updateBook;
+function getBooks() {
+    return {
+        type: "GET_BOOKS"
+    };
+}
+
+//POST a book
 function postBook(book) {
     return {
         type: "POST_BOOK",
@@ -23711,6 +23721,10 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(219);
 
+var _redux = __webpack_require__(1);
+
+var _booksActions = __webpack_require__(29);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -23729,9 +23743,35 @@ var BookList = function (_React$Component) {
     }
 
     _createClass(BookList, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            //DIspatch an action
+            this.props.getBooks();
+        }
+    }, {
         key: 'render',
         value: function render() {
-            console.log('ACCESS data : ', this.props.books);
+            var booksList = this.props.books.map(function (booksArr) {
+                return _react2.default.createElement(
+                    'div',
+                    { key: booksArr.id },
+                    _react2.default.createElement(
+                        'h2',
+                        null,
+                        booksArr.title
+                    ),
+                    _react2.default.createElement(
+                        'h2',
+                        null,
+                        booksArr.description
+                    ),
+                    _react2.default.createElement(
+                        'h2',
+                        null,
+                        booksArr.price
+                    )
+                );
+            });
             return _react2.default.createElement(
                 'div',
                 null,
@@ -23739,7 +23779,8 @@ var BookList = function (_React$Component) {
                     'h1',
                     null,
                     'Hello React'
-                )
+                ),
+                booksList
             );
         }
     }]);
@@ -23753,7 +23794,13 @@ function mapStateToProps(state) {
     };
 }
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps)(BookList);
+function mapDispatchToProps(dispatch) {
+    return (0, _redux.bindActionCreators)({
+        getBooks: _booksActions.getBooks
+    }, dispatch);
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BookList);
 
 /***/ }),
 /* 213 */
