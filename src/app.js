@@ -2,6 +2,7 @@
 //React
 import React from 'react';
 import { render } from 'react-dom';
+import {Provider} from 'react-redux';
 
 
 import { createStore, applyMiddleware } from 'redux';
@@ -28,7 +29,9 @@ store.subscribe(function () {
 import BookList from './components/booksList';
 
 render(
-    <BookList />,
+    <Provider store={store}>
+        <BookList />
+    </Provider>,
     document.getElementById('app')
 );
 
