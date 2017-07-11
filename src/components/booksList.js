@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getBooks } from '../actions/booksActions';
+import {Grid, Row, Col, Button} from 'react-bootstrap';
 
 class BookList extends React.Component{
     componentDidMount() {
@@ -17,14 +18,16 @@ class BookList extends React.Component{
                     <h2>{booksArr.title}</h2>
                     <h2>{booksArr.description}</h2>
                     <h2>{booksArr.price}</h2>
+                    <Button bsStyle="primary">Buy Now</Button>
                 </div>
             )
         })
         return (
-            <div>
-                <h1>Hello React</h1>
-                {booksList}
-            </div>
+            <Grid>
+                <Row style={{marginTop:'15px'}}>
+                    {booksList}
+                </Row>
+            </Grid>
         )
     }
 }
