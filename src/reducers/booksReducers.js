@@ -7,13 +7,13 @@ export function booksReducers(state = {
             _id: 1,
             title: 'Title: Harry 1',
             description: 'Book description',
-            price: '1 dollar'
+            price: '23.33'
         },
         {
             _id: 2,
             title: 'Title: Harry 2',
             description: 'Second Book description',
-            price: '2 dollar'
+            price: '15'
         }
     ]
 }, action) {
