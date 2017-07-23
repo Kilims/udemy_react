@@ -4,13 +4,13 @@ export function booksReducers(state = {
     books:
     [
         {
-            id: 1,
+            _id: 1,
             title: 'Title: Harry 1',
             description: 'Book description',
             price: '1 dollar'
         },
         {
-            id: 2,
+            _id: 2,
             title: 'Title: Harry 2',
             description: 'Second Book description',
             price: '2 dollar'
@@ -31,7 +31,7 @@ export function booksReducers(state = {
 
             const indexToDelete = currentBookToDelete.findIndex(
                 function(book){
-                    return book.id === action.payload.id;
+                    return book._id === action.payload._id;
                 }
             )
 
@@ -41,7 +41,7 @@ export function booksReducers(state = {
 
             const indexToUpdate = currentBookToUpdate.findIndex(
                 function(book){
-                    return book.id === action.payload.id;
+                    return book._id === action.payload._id;
                 }
             )
 
